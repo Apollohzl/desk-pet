@@ -1,9 +1,13 @@
 import tkinter as tk
 import pyautogui
+import math
+import random
 
 class SmoothMouseFollowWindow:
     def __init__(self, root):
         self.root = root
+        self.t = 0
+        
         self.root.title("Smooth Mouse Follow Window")
         self.root.geometry("200x100")  # 窗口的大小
         self.root.attributes('-topmost', True)  # 窗口始终在最上层
@@ -33,10 +37,10 @@ class SmoothMouseFollowWindow:
     def update_position(self):
         # 获取鼠标的坐标
         x, y = pyautogui.position()
-
+        
         # 目标位置更新
-        self.target_x = x + 10
-        self.target_y = y + 10  # 鼠标下方的一点，避免窗口遮挡鼠标
+        self.target_x = x + 20
+        self.target_y = y + 20  # 鼠标下方的一点，避免窗口遮挡鼠标
 
         # 获取窗口当前的位置
         current_x = self.root.winfo_x()
@@ -48,9 +52,34 @@ class SmoothMouseFollowWindow:
 
         # 设置窗口的新位置
         self.root.geometry(f'+{int(new_x)}+{int(new_y)}')
+        self.t += 0.01
+        print(self.t,{x==current_x},{y==current_y})
+        if self.t >= random.randint(10,15):
+            print("10秒!")
+            self.t = 0
+            self.shake_window()
 
         # 继续调用自身以保持窗口位置更新
         self.root.after(10, self.update_position)  # 每10毫秒更新一次
+
+    def shake_window(self):
+        x = root.winfo_x()
+        y = root.winfo_y()
+        center_x = x + root.winfo_width() // 2
+        center_y = y + root.winfo_height() // 2
+        radius = 10
+        shake_times = 9
+        interval = 10
+        for r in range(2):
+            for i in range(shake_times):
+                angle = (i / shake_times) * 2 * math.pi
+                offset_x = int(radius * math.cos(angle))
+                offset_y = int(radius * math.sin(angle))
+                new_x = center_x + offset_x - root.winfo_width() // 2
+                new_y = center_y + offset_y - root.winfo_height() // 2
+                root.geometry(f"+{new_x}+{new_y}")
+                root.update_idletasks()
+                root.after(interval)
 
     def adjust_position(self, event):
         # 设置距离阈值
