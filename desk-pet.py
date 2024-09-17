@@ -83,7 +83,7 @@ class SmoothMouseFollowWindow:
 
     def adjust_position(self, event):
         # 设置距离阈值
-        threshold = 5  # 5像素的阈值
+        threshold = 50  # 5像素的阈值
 
         # 获取当前窗口位置
         current_x = self.root.winfo_x()
@@ -106,7 +106,7 @@ class SmoothMouseFollowWindow:
             new_x = current_x + self.adjustment_step
             if abs(new_x - self.target_x) > threshold:
                 self.root.geometry(f'+{new_x}+{current_y}')
-                
+        
     def quit_program(self):
         self.root.quit()  # 退出主事件循环
         self.root.destroy()  # 销毁窗口
@@ -114,4 +114,5 @@ class SmoothMouseFollowWindow:
 # 创建 Tkinter 主窗口
 root = tk.Tk()
 app = SmoothMouseFollowWindow(root)
+
 root.mainloop()
